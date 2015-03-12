@@ -49,7 +49,7 @@ void ProcessEvent(LCEvent *readerEvent, ExRootTreeBranch *branchEvent,
   ExRootTreeBranch *branchCaloHit)
 {
   LCCollection *collection = 0;
-  SimCalorimeterHit *hit = 0;
+  CalorimeterHit *hit = 0;
   Int_t i = 0, numberOfElements = 0;
 
   Event *event = 0;
@@ -60,23 +60,24 @@ void ProcessEvent(LCEvent *readerEvent, ExRootTreeBranch *branchEvent,
   event->RunNumber = readerEvent->getRunNumber() ;
 
   collection = readerEvent->getCollection("HCALEndcap");
+  CellIDDecoder<CalorimeterHit> decoder(collection);
 
   numberOfElements = collection->getNumberOfElements();
   for(i = 0; i < numberOfElements; ++i)
   {
-    hit = static_cast<SimCalorimeterHit *>(collection->getElementAt(i));
+    hit = static_cast<CalorimeterHit *>(collection->getElementAt(i));
 
     caloHit = static_cast<CaloHit*>(branchCaloHit->NewEntry());
-    caloHit->I = 0;
-    caloHit->J = 0;
-    caloHit->K = 0;
-    caloHit->Dif_id = 0;
-    caloHit->Asic_id = 0;
-    caloHit->Chan_id = 0;
+    caloHit->I = decoder(hit)["I"];
+    caloHit->J = decoder(hit)["J"];
+    caloHit->K = 0; // decoder(hit)["K"];
+    caloHit->Dif_id = 0; // decoder(hit)["Dif_id"];
+    caloHit->Asic_id = 0; // decoder(hit)["Asic_id"];
+    caloHit->Chan_id = 0; // decoder(hit)["Chan_id"];
     caloHit->X = hit->getPosition()[0]/10.0;
     caloHit->Y = hit->getPosition()[1]/10.0;
     caloHit->Z = hit->getPosition()[2]/10.0;
-    caloHit->T = 0;
+    caloHit->T = hit->getTime();
     caloHit->E = hit->getEnergy(); // the threshold
   }
 }
