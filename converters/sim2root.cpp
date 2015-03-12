@@ -70,7 +70,7 @@ void ProcessEvent(LCEvent *readerEvent, ExRootTreeBranch *branchEvent,
     caloHit = static_cast<CaloHit*>(branchCaloHit->NewEntry());
     caloHit->I = decoder(hit)["I"];
     caloHit->J = decoder(hit)["J"];
-    caloHit->K = 0; // decoder(hit)["K"];
+    caloHit->K = decoder(hit)["K-1"];
     caloHit->Dif_id = 0; // decoder(hit)["Dif_id"];
     caloHit->Asic_id = 0; // decoder(hit)["Asic_id"];
     caloHit->Chan_id = 0; // decoder(hit)["Chan_id"];
