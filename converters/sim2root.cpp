@@ -59,8 +59,7 @@ void ProcessEvent(LCEvent *readerEvent, ExRootTreeBranch *branchEvent,
   event->EventNumber = readerEvent->getEventNumber();
   event->RunNumber = readerEvent->getRunNumber() ;
 
-  collection = readerEvent->getCollection("SDHCAL_Proto_EndCap");
-  CellIDDecoder<SimCalorimeterHit> decoder(collection);
+  collection = readerEvent->getCollection("HCALEndcap");
 
   numberOfElements = collection->getNumberOfElements();
   for(i = 0; i < numberOfElements; ++i)
@@ -68,12 +67,12 @@ void ProcessEvent(LCEvent *readerEvent, ExRootTreeBranch *branchEvent,
     hit = static_cast<SimCalorimeterHit *>(collection->getElementAt(i));
 
     caloHit = static_cast<CaloHit*>(branchCaloHit->NewEntry());
-    caloHit->I = decoder(hit)["I"];
-    caloHit->J = decoder(hit)["J"];
-    caloHit->K = decoder(hit)["K"];
-    caloHit->Dif_id = decoder(hit)["Dif_id"];
-    caloHit->Asic_id = decoder(hit)["Asic_id"];
-    caloHit->Chan_id = decoder(hit)["Chan_id"];
+    caloHit->I = 0;
+    caloHit->J = 0;
+    caloHit->K = 0;
+    caloHit->Dif_id = 0;
+    caloHit->Asic_id = 0;
+    caloHit->Chan_id = 0;
     caloHit->X = hit->getPosition()[0]/10.0;
     caloHit->Y = hit->getPosition()[1]/10.0;
     caloHit->Z = hit->getPosition()[2]/10.0;
